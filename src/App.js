@@ -79,13 +79,13 @@ function App() {
             <h3>Fill Details</h3>
             <form onSubmit={handleSubmit}>
               <label>Username:</label>
-              <input id="username" value={formData.username} onChange={handleChange} />
+              <input id="username" value={formData.username}  required onChange={handleChange} />
 
               <label>Email Address:</label>
-              <input id="email" value={formData.email} onChange={handleChange} />
+              <input id="email" value={formData.email}  type="email" required onChange={handleChange} />
 
               <label>Phone Number:</label>
-              <input id="phone" value={formData.phone} onChange={handleChange} />
+              <input id="phone" value={formData.phone} required onChange={handleChange} />
 
               <label>Date of Birth:</label>
               <input id="dob" type="date" value={formData.dob} onChange={handleChange} />
