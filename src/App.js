@@ -14,7 +14,6 @@ function App() {
   const closeModal = () => setIsModalOpen(false);
 
   useEffect(() => {
-    // Close modal when clicking outside
     const handleClickOutside = (event) => {
       const modalContent = document.querySelector(".modal-content");
       if (isModalOpen && modalContent && !modalContent.contains(event.target)) {
@@ -35,8 +34,13 @@ function App() {
   const validate = () => {
     const { username, email, phone, dob } = formData;
 
-    if (!username || !email || !phone || !dob) {
-      alert("All fields are required.");
+    if (!username) {
+      alert("Please fill the Username field.");
+      return false;
+    }
+
+    if (!email) {
+      alert("Please fill the Email Address field.");
       return false;
     }
 
@@ -45,8 +49,18 @@ function App() {
       return false;
     }
 
+    if (!phone) {
+      alert("Please fill the Phone Number field.");
+      return false;
+    }
+
     if (!/^\d{10}$/.test(phone)) {
       alert("Invalid phone number. Please enter a 10-digit phone number.");
+      return false;
+    }
+
+    if (!dob) {
+      alert("Please fill the Date of Birth field.");
       return false;
     }
 
@@ -79,16 +93,33 @@ function App() {
             <h3>Fill Details</h3>
             <form onSubmit={handleSubmit}>
               <label>Username:</label>
-              <input id="username" value={formData.username}  required onChange={handleChange} />
+              <input
+                id="username"
+                value={formData.username}
+                onChange={handleChange}
+              />
 
               <label>Email Address:</label>
-              <input id="email" value={formData.email}  type="email" required onChange={handleChange} />
+              <input
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
 
               <label>Phone Number:</label>
-              <input id="phone" value={formData.phone} required onChange={handleChange} />
+              <input
+                id="phone"
+                value={formData.phone}
+                onChange={handleChange}
+              />
 
               <label>Date of Birth:</label>
-              <input id="dob" type="date" value={formData.dob} onChange={handleChange} />
+              <input
+                id="dob"
+                type="date"
+                value={formData.dob}
+                onChange={handleChange}
+              />
 
               <button className="submit-button" type="submit">
                 Submit
