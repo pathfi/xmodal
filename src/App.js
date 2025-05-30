@@ -56,9 +56,14 @@ const App = () => {
   const handleSumbit = function (e) {
     // console.log(e);
     e.preventDefault();
-    // console.log(e.target["number"].value);
-    // console.log(typeof e.target["number"].value);
-    // console.log(e.target["number"].value.length);
+    let username =e.target["username"].value;
+    let email = e.target["email"].value;
+   let phone = e.target["phone"].value;
+    let dateOB =e.target["dob"].value;
+    if(!username || !email || !phone || !dateOB) {
+      alert("Please fill all the fields");
+      return;
+    }
     if (e.target["phone"].value.length !== 10) alert("Invalid phone number");
     // alert("Invalid date of birth");
     // alert("Invalid email");
