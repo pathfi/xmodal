@@ -54,30 +54,45 @@ const App = () => {
   const handleFormOpen = () => setViewModal(!viewModal);
 
   const handleSumbit = function (e) {
-    // console.log(e);
     e.preventDefault();
-    let username =e.target["username"].value;
-    let email = e.target["email"].value;
-   let phone = e.target["phone"].value;
-    let dateOB =e.target["dob"].value;
-    if(!username || !email || !phone || !dateOB) {
+    
+    let username = e.target["username"].value.trim();
+    let email = e.target["email"].value.trim();
+    let phone = e.target["phone"].value.trim();
+    let dateOB = e.target["dob"].value.trim();
+  
+    // Check for empty fields first
+    if (!username || !email || !phone || !dateOB) {
       alert("All fields are required.");
       return;
     }
-    if (e.target["phone"].value.length !== 10) alert("Invalid phone number");
-    // alert("Invalid date of birth");
-    // alert("Invalid email");
-    const dateGiven = new Date(e.target["dob"].value).getTime();
-    // console.log(dateGiven);
-    const date = new Date().getTime();
-    // console.log(date);
-
-    if (dateGiven > date) {
-      alert("Invalid date of birth");
+  
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Invalid email");
+      return;
     }
-
-    // if (e.target["dob"].value.length !== 10) alert("Invalid date of birth");
+  
+    // Phone number validation
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+      alert("Invalid phone number");
+      return;
+    }
+  
+    // Date of birth validation (should not be in the future)
+    const dateGiven = new Date(dateOB).getTime();
+    const now = new Date().getTime();
+    if (dateGiven > now) {
+      alert("Invalid date of birth");
+      return;
+    }
+  
+    // If all validations pass
+    alert("Form submitted successfully!");
   };
+  
 
   const handlePhoneNumber = (e) => setPhoneNumber(e.target.value);
 
