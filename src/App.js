@@ -61,7 +61,7 @@ const App = () => {
    let phone = e.target["phone"].value;
     let dateOB =e.target["dob"].value;
     if(!username || !email || !phone || !dateOB) {
-      alert("Please fill all the fields");
+      alert("All fields are required.");
       return;
     }
     if (e.target["phone"].value.length !== 10) alert("Invalid phone number");
