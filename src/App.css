@@ -1,54 +1,96 @@
-.App {
-  text-align: center;
-  padding: 20px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-button {
-  padding: 10px 20px;
-  margin: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
+body::-webkit-scrollbar {
+  display: none;
 }
+
+.btn {
+  background-color: darkblue;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: none;
+
+  width: 100px;
+}
+
+.app-Container {
+  /* margin: 0 auto; */
+  /* padding: auto; */
+  width: 100%;
+  text-align: center;
+
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+
+  padding: 50px 0;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  border: 2px solid red;
+  width: 300px;
+}
+
+h3 {
+  font-size: 25px;
+}
+label {
+  font-size: 18px;
+  font-weight: 600;
+}
+input {
+  width: 80%;
+  height: 28px;
+  /* height: 30%; */
+}
+
+/* .modal-content {
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  height: 100vh;
+} */
 
 .modal {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  height: 100vh;
+  width: 100vw;
+
+  background-color: rgba(0, 0, 0, 0.15); /* dim background */
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
-  background: white;
-  padding: 30px;
+  background-color: white;
+  padding: 20px;
   border-radius: 8px;
-  width: 300px;
-  text-align: left;
-}
-
-.modal-content label {
-  display: block;
-  margin-top: 10px;
-}
-
-.modal-content input {
-  width: 100%;
-  padding: 6px;
-  margin-top: 5px;
-}
-
-.submit-button {
-  margin-top: 20px;
-  background-color: #007bff;
-  color: white;
-  width: 100%;
-  padding: 8px;
-  border: none;
-  border-radius: 4px;
+  width: 90%;
+  max-width: 350px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

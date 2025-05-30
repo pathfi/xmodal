@@ -1,135 +1,115 @@
-import React, { useState, useEffect } from "react";
+/* nOTE -- 
+ 
+1) dO AGAIN THE OUTSIDE CLICK THING if problem see quad b there you have implemented this feature.
+
+2) see the css that chatgpt gave you  for the modal that will be helpful to understand how to make modal.................
+
+   */
+
+import React, { useEffect, useState } from "react";
+// import "./App.css";
 import "./App.css";
+import Button from "./components/Button";
+import Modal from "./components/Modal";
 
-function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    phone: "",
-    dob: ""
-  });
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+const App = () => {
+  // All Hooks here :--
+  const [viewModal, setViewModal] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      const modalContent = document.querySelector(".modal-content");
-      if (isModalOpen && modalContent && !modalContent.contains(event.target)) {
-        closeModal();
+    if (!viewModal) return;
+    // if modal is already closed then no need to open the useeffect function .
+
+    const handleOutsideClick = (event) => {
+      if (!event.target.closest(".modal-content")) {
+        // closest() check karta hai kya click .modal-content ke andar hua — agar nahi, toh matlab bahar hai
+        setViewModal(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleOutsideClick);
+
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [isModalOpen]);
+  }, [viewModal]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
+  // useEffect(() => {
+  //   const handleClickOutside = (e) => {
+  //     // agar clicked element ka className 'modal' hai
+  //     if (e.target.className === "modal") {
+  //       setViewModal(false);
+  //     }
+  //   };
 
-  const validate = () => {
-    const { username, email, phone, dob } = formData;
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
 
-    if (!username) {
-      alert("Please fill the Username field.");
-      return false;
-    }
+  //------------------- All function here :---
 
-    if (!email) {
-      alert("Please fill the Email Address field.");
-      return false;
-    }
+  const handleFormOpen = () => setViewModal(!viewModal);
 
-    if (!email.includes("@")) {
-      alert("Invalid email. Please check your email address.");
-      return false;
-    }
-
-    if (!phone) {
-      alert("Please fill the Phone Number field.");
-      return false;
-    }
-
-    if (!/^\d{10}$/.test(phone)) {
-      alert("Invalid phone number. Please enter a 10-digit phone number.");
-      return false;
-    }
-
-    if (!dob) {
-      alert("Please fill the Date of Birth field.");
-      return false;
-    }
-
-    const dobDate = new Date(dob);
-    const today = new Date();
-    if (dobDate > today) {
-      alert("Invalid date of birth. Please enter a valid past date.");
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleSubmit = (e) => {
+  const handleSumbit = function (e) {
+    // console.log(e);
     e.preventDefault();
-    if (validate()) {
-      setIsModalOpen(false);
-      setFormData({ username: "", email: "", phone: "", dob: "" });
+    // console.log(e.target["number"].value);
+    // console.log(typeof e.target["number"].value);
+    // console.log(e.target["number"].value.length);
+    if (e.target["phone"].value.length !== 10) alert("Invalid phone number");
+    // alert("Invalid date of birth");
+    // alert("Invalid email");
+    const dateGiven = new Date(e.target["dob"].value).getTime();
+    // console.log(dateGiven);
+    const date = new Date().getTime();
+    // console.log(date);
+
+    if (dateGiven > date) {
+      alert("Invalid date of birth");
     }
+
+    // if (e.target["dob"].value.length !== 10) alert("Invalid date of birth");
+  };
+
+  const handlePhoneNumber = (e) => setPhoneNumber(e.target.value);
+
+  const styleAppContainer = {
+    opacity: 0.5,
   };
 
   return (
-    <div className="App">
-      <h2>User Details Modal</h2>
-      <button onClick={openModal}>Open Form</button>
+    <>
+      <div className="app-Container" style={viewModal ? styleAppContainer : {}}>
+        {/* because style expects an object not a string  */}
+        <h1>User Details Modal</h1>
 
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Fill Details</h3>
-            <form onSubmit={handleSubmit}>
-              <label>Username:</label>
-              <input
-                id="username"
-                value={formData.username}
-                onChange={handleChange}
-              />
+        {/* <button className="btn">Open Form</button> */}
+        <Button onBtnClick={handleFormOpen}>Open Form</Button>
 
-              <label>Email Address:</label>
-              <input
-                id="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-
-              <label>Phone Number:</label>
-              <input
-                id="phone"
-                value={formData.phone}
-                onChange={handleChange}
-              />
-
-              <label>Date of Birth:</label>
-              <input
-                id="dob"
-                type="date"
-                value={formData.dob}
-                onChange={handleChange}
-              />
-
-              <button className="submit-button" type="submit">
-                Submit
-              </button>
-            </form>
+        {/* {viewModal && (
+          <div className="modal">
+            <Modal
+              handlePhoneNumber={handlePhoneNumber}
+              phoneNumber={phoneNumber}
+              onFormSubmit={handleSumbit}
+            ></Modal>
           </div>
+        )} */}
+      </div>
+      {viewModal && (
+        <div className="modal">
+          <Modal
+            handlePhoneNumber={handlePhoneNumber}
+            phoneNumber={phoneNumber}
+            onFormSubmit={handleSumbit}
+          ></Modal>
         </div>
       )}
-    </div>
+    </>
   );
-}
+};
 
 export default App;
