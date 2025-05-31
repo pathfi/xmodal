@@ -53,45 +53,51 @@ const App = () => {
 
   const handleFormOpen = () => setViewModal(!viewModal);
 
-  const handleSumbit = function (e) {
+  const handleSumbit = (e) => {
     e.preventDefault();
-    
-    let username = e.target["username"].value.trim();
-    let email = e.target["email"].value.trim();
-    let phone = e.target["phone"].value.trim();
-    let dateOB = e.target["dob"].value.trim();
+    const username = e.target.username.value.trim();
+    const email    = e.target.email.value.trim();
+    const phone    = e.target.phone.value.trim();
+    const dateOB   = e.target.dob.value.trim();
   
-    // Check for empty fields first
+    // 1) Check email if they typed something
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert("Invalid email");
+        return;
+      }
+    }
+  
+    // 2) Check phone if they typed something
+    if (phone) {
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(phone)) {
+        alert("Invalid phone number");
+        return;
+      }
+    }
+  
+    // 3) Check DOB if they typed something
+    if (dateOB) {
+      const dateGiven = new Date(dateOB).getTime();
+      const now = Date.now();
+      if (dateGiven > now) {
+        alert("Invalid date of birth");
+        return;
+      }
+    }
+  
+    // 4) Finally, if any field is still empty, show “All fields are required”
     if (!username || !email || !phone || !dateOB) {
       alert("All fields are required.");
       return;
     }
   
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert("Invalid email");
-      return;
-    }
-  
-    // Phone number validation
-    const phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(phone)) {
-      alert("Invalid phone number");
-      return;
-    }
-  
-    // Date of birth validation (should not be in the future)
-    const dateGiven = new Date(dateOB).getTime();
-    const now = new Date().getTime();
-    if (dateGiven > now) {
-      alert("Invalid date of birth");
-      return;
-    }
-  
-    // If all validations pass
+    // 5) At this point all validations have passed
     alert("Form submitted successfully!");
   };
+  
   
 
   const handlePhoneNumber = (e) => setPhoneNumber(e.target.value);
