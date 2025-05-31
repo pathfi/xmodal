@@ -1,66 +1,49 @@
-/* nOTE -- 
- 
-1) dO AGAIN THE OUTSIDE CLICK THING if problem see quad b there you have implemented this feature.
-
-2) see the css that chatgpt gave you  for the modal that will be helpful to understand how to make modal.................
-
-   */
-
 import React, { useEffect, useState } from "react";
-// import "./App.css";
 import "./App.css";
 import Button from "./components/Button";
 import Modal from "./components/Modal";
 
 const App = () => {
-  // All Hooks here :--
+  // State to control modal visibility
   const [viewModal, setViewModal] = useState(false);
+
+  // State to hold the phone number (as the Modal component expects)
   const [phoneNumber, setPhoneNumber] = useState("");
 
+  // Whenever the modal opens, we install a click‐outside listener
   useEffect(() => {
     if (!viewModal) return;
-    // if modal is already closed then no need to open the useeffect function .
 
     const handleOutsideClick = (event) => {
+      // If click is not inside .modal-content, close the modal
       if (!event.target.closest(".modal-content")) {
-        // closest() check karta hai kya click .modal-content ke andar hua — agar nahi, toh matlab bahar hai
         setViewModal(false);
       }
     };
 
     document.addEventListener("mousedown", handleOutsideClick);
-
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [viewModal]);
 
-  // useEffect(() => {
-  //   const handleClickOutside = (e) => {
-  //     // agar clicked element ka className 'modal' hai
-  //     if (e.target.className === "modal") {
-  //       setViewModal(false);
-  //     }
-  //   };
+  // Toggle modal open/close
+  const handleFormOpen = () => {
+    setViewModal((prev) => !prev);
+    // Clear phoneNumber when re-opening
+    if (!viewModal) setPhoneNumber("");
+  };
 
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []);
-
-  //------------------- All function here :---
-
-  const handleFormOpen = () => setViewModal(!viewModal);
-
-  const handleSumbit = (e) => {
+  // The form‐submission handler that the Modal will call
+  const handleSubmit = (e) => {
     e.preventDefault();
+
     const username = e.target.username.value.trim();
-    const email    = e.target.email.value.trim();
-    const phone    = e.target.phone.value.trim();
-    const dateOB   = e.target.dob.value.trim();
-  
-    // 1) Check email if they typed something
+    const email = e.target.email.value.trim();
+    const phone = e.target.phone.value.trim();
+    const dateOB = e.target.dob.value.trim();
+
+    // 1) Validate email format if non‐empty
     if (email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
@@ -68,8 +51,8 @@ const App = () => {
         return;
       }
     }
-  
-    // 2) Check phone if they typed something
+
+    // 2) Validate phone format if non‐empty
     if (phone) {
       const phoneRegex = /^\d{10}$/;
       if (!phoneRegex.test(phone)) {
@@ -77,8 +60,8 @@ const App = () => {
         return;
       }
     }
-  
-    // 3) Check DOB if they typed something
+
+    // 3) Validate DOB if non‐empty
     if (dateOB) {
       const dateGiven = new Date(dateOB).getTime();
       const now = Date.now();
@@ -87,51 +70,45 @@ const App = () => {
         return;
       }
     }
-  
-    // 4) Finally, if any field is still empty, show “All fields are required”
+
+    // 4) Finally check for any empty field
     if (!username || !email || !phone || !dateOB) {
       alert("All fields are required.");
       return;
     }
-  
-    // 5) At this point all validations have passed
+
+    // 5) If everything is valid:
     alert("Form submitted successfully!");
+    setViewModal(false);
   };
-  
-  
 
-  const handlePhoneNumber = (e) => setPhoneNumber(e.target.value);
+  // Controlled phoneNumber setter to pass into Modal
+  const handlePhoneNumber = (e) => {
+    setPhoneNumber(e.target.value);
+  };
 
+  // Dim the background when modal is open
   const styleAppContainer = {
     opacity: 0.5,
   };
 
   return (
     <>
-      <div className="app-Container" style={viewModal ? styleAppContainer : {}}>
-        {/* because style expects an object not a string  */}
+      <div
+        className="app-Container"
+        style={viewModal ? styleAppContainer : {}}
+      >
         <h1>User Details Modal</h1>
-
-        {/* <button className="btn">Open Form</button> */}
         <Button onBtnClick={handleFormOpen}>Open Form</Button>
-
-        {/* {viewModal && (
-          <div className="modal">
-            <Modal
-              handlePhoneNumber={handlePhoneNumber}
-              phoneNumber={phoneNumber}
-              onFormSubmit={handleSumbit}
-            ></Modal>
-          </div>
-        )} */}
       </div>
+
       {viewModal && (
         <div className="modal">
           <Modal
-            handlePhoneNumber={handlePhoneNumber}
             phoneNumber={phoneNumber}
-            onFormSubmit={handleSumbit}
-          ></Modal>
+            handlePhoneNumber={handlePhoneNumber}
+            onFormSubmit={handleSubmit}
+          />
         </div>
       )}
     </>
